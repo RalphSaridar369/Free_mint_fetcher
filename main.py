@@ -4,7 +4,7 @@ from bs4 import BeautifulSoup
 import telegram.ext
 from telegram import *
 
-ShelfFile = shelve.open('shelf')
+ShelfFile = shelve.open('shelve')
 ShelfFile['hash'] = ''
 ShelfFile.close()
 
@@ -19,6 +19,9 @@ def Mints(update,context):
     else:
         pages = int(update.message.text.split(' ')[1])
         for i in range(pages):
+            ShelfFile = shelve.open('shelve')
+            hash = ShelfFile['hash']
+            ShelfFile.close()
             reponse = requests.get('https://polygonscan.com/txs?p={}'.format(i+1))
             soup = BeautifulSoup(reponse.content, 'html.parser')
             table = soup.find('table',class_='table')
@@ -26,11 +29,11 @@ def Mints(update,context):
             message = "Page: {}\n\n".format(str(i+1))
             for j in rows:
                 all_tds = j.find_all('td') 
-                ShelfFile = shelve.open('shelf')
-                if (all_tds[2].text == "Mint" and (all_tds[8].text not in ShelfFile['hash'])):
+                if (all_tds[2].text == "Mint" and (all_tds[8].text not in hash)):
                     print(all_tds[8].text)
                     message +='https://polygonscan.com/address/{}'.format(all_tds[8].text[1::]) +"\n"#'<a href={}>{}</a>'.format(('https://polygonscan.com/address/{}'.format((all_tds[8].text))),all_tds[8].text)
                     print("TSSSSSSSSST")
+                    ShelfFile = shelve.open('shelve')
                     ShelfFile['hash'] += all_tds[8].text+"-"
                     ShelfFile.close()
             if('https' in message):
