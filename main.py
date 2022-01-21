@@ -8,7 +8,7 @@ ShelfFile = shelve.open('shelve')
 ShelfFile['hash'] = ''
 ShelfFile.close()
 
-bot_api = '5293722053:AAHtIAGP1F9E2R9ul-rt1J9-lkx7UjCUYqA'
+bot_api = '5131064182:AAGzPc7CfY4Wfi720ZQspfLanPvrEmC5p9E'
 
 updater = telegram.ext.Updater(bot_api)
 disp = updater.dispatcher
